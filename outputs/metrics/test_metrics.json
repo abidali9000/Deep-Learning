@@ -1,0 +1,43 @@
+{
+  "overall_accuracy": 0.839316534345875,
+  "precision_macro": 0.7686470146643767,
+  "recall_macro": 0.8123862859274302,
+  "f1_macro": 0.7855578504716925,
+  "confusion_matrix": [
+    [
+      3882,
+      628
+    ],
+    [
+      303,
+      981
+    ]
+  ],
+  "label_names": {
+    "0": "landbird",
+    "1": "waterbird"
+  },
+  "subgroup_metrics": {
+    "waterbird-water": {
+      "count": 642,
+      "accuracy": 0.9330218068535826,
+      "avg_confidence": 0.9686162972190299
+    },
+    "waterbird-land": {
+      "count": 642,
+      "accuracy": 0.5950155763239875,
+      "avg_confidence": 0.9008161106213602
+    },
+    "landbird-land": {
+      "count": 2255,
+      "accuracy": 0.985809312638581,
+      "avg_confidence": 0.984343697728709
+    },
+    "landbird-water": {
+      "count": 2255,
+      "accuracy": 0.7356984478935699,
+      "avg_confidence": 0.8762259563162692
+    }
+  },
+  "worst_group_accuracy": 0.5950155763239875
+}

@@ -1,0 +1,7 @@
+../.venv/
+../.venv-1/
+../outputs/checkpoints/
+../outputs/gradcam/idx*
+node_modules/
+.next/
+.env*

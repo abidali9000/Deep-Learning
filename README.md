@@ -1,5 +1,9 @@
 # Saliency-based Analysis of Shortcut Learning in CNNs
 
+> **Online presentation:** the full project is published as an interactive site under [`website/`](./website) (Next.js, deployable to Vercel). It includes pipeline diagrams, the Grad-CAM gallery, intervention dashboards, a code walkthrough, a printable PDF report, and an embeddable live demo.
+>
+> **Live model demo:** the trained checkpoint is too large for GitHub, so it's hosted on a Hugging Face Space (see [`huggingface_space/`](./huggingface_space)) and embedded into the website's `/demo` page.
+
 This project implements the Advanced Deep Learning Project 18 instructions:
 
 **Goal:** investigate whether a CNN trained on the biased Waterbirds dataset relies on background cues instead of object/bird features.

@@ -7,7 +7,7 @@ sdk: gradio
 sdk_version: 4.44.0
 app_file: app.py
 pinned: false
-short_description: Live demo for Project 18 — saliency-based shortcut analysis on Waterbirds.
+short_description: Saliency analysis of CNN shortcut learning on Waterbirds.
 ---
 
 # Waterbirds shortcut-learning demo

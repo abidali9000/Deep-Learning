@@ -47,25 +47,7 @@ export function ComparisonGallery() {
   const visible = COMPARISON_PLATES.filter((p) => !missing.has(p.file));
 
   if (visible.length === 0) {
-    return (
-      <div className="card border-dashed text-sm text-ink-400">
-        <p className="font-semibold text-ink-200 mb-1">
-          Comparison plates not generated yet
-        </p>
-        <p>
-          Run the helper script locally with the trained checkpoint:
-        </p>
-        <pre className="mt-2 rounded-lg bg-ink-950 p-3 text-xs overflow-x-auto text-ink-100">
-{`python -m src.comparison_plates \\
-  --config config.yaml \\
-  --checkpoint outputs/checkpoints/best_model.pt \\
-  --out outputs/comparisons
-
-# then copy the PNGs to website/public/comparisons/
-cp outputs/comparisons/*.png website/public/comparisons/`}
-        </pre>
-      </div>
-    );
+    return null;
   }
 
   return (

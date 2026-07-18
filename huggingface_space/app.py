@@ -1,12 +1,3 @@
-"""Gradio demo for the Waterbirds shortcut-learning model.
-
-Loads outputs/checkpoints/best_model.pt (uploaded alongside this app via
-git-lfs) and runs:
-  - prediction (landbird vs. waterbird) with confidence
-  - Grad-CAM overlay for the predicted class
-  - 60% center-crop foreground heuristic (white box)
-  - foreground / background saliency split
-"""
 from __future__ import annotations
 
 from pathlib import Path
@@ -41,7 +32,6 @@ def load_model() -> nn.Module:
     model = build_resnet18()
     if CKPT_PATH.exists():
         state = torch.load(CKPT_PATH, map_location=DEVICE)
-        # Accept both raw state_dict and the wrapped checkpoint format used in src/train.py
         if isinstance(state, dict) and "model_state_dict" in state:
             model.load_state_dict(state["model_state_dict"])
         else:
@@ -116,7 +106,6 @@ def predict(image: Image.Image):
     targets = [ClassifierOutputTarget(pred)]
     grayscale_cam = CAM(input_tensor=tensor, targets=targets)[0]
 
-    # rgb in [0,1] for show_cam_on_image
     rgb01 = tensor[0].cpu().numpy().transpose(1, 2, 0)
     mean = np.array([0.485, 0.456, 0.406])
     std = np.array([0.229, 0.224, 0.225])
@@ -144,13 +133,12 @@ with gr.Blocks(theme=gr.themes.Soft(primary_hue="indigo")) as demo:
         """
         # Waterbirds shortcut-learning demo
 
-        This is the live demo for **Project 18 · Saliency-based Analysis of
-        Shortcut Learning in CNNs**. Upload an image of a bird and the model
-        will predict landbird vs. waterbird, show its Grad-CAM, and report the
-        foreground / background attention-bias score.
+        Project 18 · Saliency-based Analysis of Shortcut Learning in CNNs.
+        Upload a bird image to see the predicted class, the Grad-CAM map, and
+        the foreground / background attention-bias score.
 
-        Try uploading a *waterbird on a forest background* or a *landbird on
-        water* — those are the cases where the shortcut bites.
+        Conflict cases (a waterbird on a land background, or a landbird on
+        water) are the most informative to try.
         """
     )
     with gr.Row():

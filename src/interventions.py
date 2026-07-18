@@ -29,7 +29,6 @@ def normalize_np_to_tensor(rgb: np.ndarray, device=None) -> torch.Tensor:
 
 
 def apply_intervention(rgb: np.ndarray, kind: str, ratio: float = 0.6, blur_kernel: int = 31) -> np.ndarray:
-    """rgb is HWC float in [0,1]."""
     h, w = rgb.shape[:2]
     mask = center_mask(h, w, ratio).astype(bool)
     out = rgb.copy()
@@ -59,7 +58,7 @@ def apply_intervention(rgb: np.ndarray, kind: str, ratio: float = 0.6, blur_kern
         for y in range(0, h - patch + 1, patch):
             for x in range(0, w - patch + 1, patch):
                 patch_mask = mask[y:y+patch, x:x+patch]
-                if patch_mask.mean() < 0.25:  # mostly background
+                if patch_mask.mean() < 0.25:
                     patches.append(img[y:y+patch, x:x+patch].copy())
                     coords.append((y, x))
         if len(patches) > 1:

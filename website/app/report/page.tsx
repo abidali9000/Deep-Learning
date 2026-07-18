@@ -32,7 +32,6 @@ export default function ReportPage() {
         </div>
       </div>
 
-      {/* Title block */}
       <header className="mb-10">
         <div className="text-xs uppercase tracking-widest text-accent">
           Project 18 · Advanced Deep Learning

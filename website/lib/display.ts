@@ -1,9 +1,3 @@
-/**
- * Client-safe constants, types, and formatting helpers.
- * Must NOT import any Node-only APIs (fs, path, etc.) — this file is
- * imported by 'use client' components.
- */
-
 export type SubgroupMetric = {
   count: number;
   accuracy: number;

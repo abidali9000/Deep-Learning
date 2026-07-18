@@ -1,18 +1,3 @@
-"""Generate side-by-side Grad-CAM comparison plates for each intervention.
-
-For a curated set of test images, produces one PNG per sample with five panels:
-original | background blur | background mask | background patch shuffle | foreground mask
-Each panel shows the Grad-CAM overlay for the model's predicted class under
-that condition, with the predicted label and confidence in the panel title.
-
-Run after training:
-    python -m src.comparison_plates --config config.yaml \
-        --checkpoint outputs/checkpoints/best_model.pt \
-        --out outputs/comparisons --indices 20,24,102,105,10,101
-
-The output PNGs can be copied into website/public/comparisons/ for display
-in the website's interventions page.
-"""
 import argparse
 from pathlib import Path
 from typing import List

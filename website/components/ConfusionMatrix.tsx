@@ -1,7 +1,7 @@
 import { testMetrics } from "@/lib/results";
 
 export function ConfusionMatrix() {
-  const cm = testMetrics.confusion_matrix; // [[TN, FP], [FN, TP]] for label 0 first
+  const cm = testMetrics.confusion_matrix;
   const labels = ["landbird", "waterbird"];
   const totals = cm.map((row) => row.reduce((a, b) => a + b, 0));
   const max = Math.max(...cm.flat());

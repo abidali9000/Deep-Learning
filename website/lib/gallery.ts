@@ -1,7 +1,3 @@
-/**
- * Curated Grad-CAM gallery — 12 images chosen to span the four subgroups
- * and to surface the shortcut-failure cases for the discussion.
- */
 export type GalleryItem = {
   file: string;
   group: "waterbird-water" | "waterbird-land" | "landbird-land" | "landbird-water";

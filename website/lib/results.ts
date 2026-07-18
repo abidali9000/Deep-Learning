@@ -1,10 +1,3 @@
-/**
- * Build-time loader for experiment outputs (server-only).
- *
- * Reads JSON + CSV directly from outputs/ so the website always reflects
- * the latest run of the pipeline. Re-exports types and constants from
- * ./display so server pages can use a single import.
- */
 import "server-only";
 import fs from "node:fs";
 import path from "node:path";
@@ -33,12 +26,10 @@ function readCsv<T extends Record<string, string>>(rel: string): T[] {
   return parse(raw, { columns: true, skip_empty_lines: true }) as T[];
 }
 
-// ---------- Test metrics ----------
 export const testMetrics: TestMetrics = readJson<TestMetrics>(
   "metrics/test_metrics.json",
 );
 
-// ---------- Training history ----------
 const rawTrain = readCsv<Record<string, string>>("metrics/train_history.csv");
 export const trainHistory: TrainEpochRow[] = rawTrain.map((r) => ({
   epoch: Number(r.epoch),
@@ -52,7 +43,6 @@ export const trainHistory: TrainEpochRow[] = rawTrain.map((r) => ({
   val_acc_landbird_water: Number(r["val_acc_landbird-water"]),
 }));
 
-// ---------- Grad-CAM group summary ----------
 const rawGradCamGroup = readCsv<Record<string, string>>(
   "gradcam/gradcam_group_summary.csv",
 );
@@ -66,7 +56,6 @@ export const gradCamGroupSummary: GradCamGroupRow[] = rawGradCamGroup.map(
   }),
 );
 
-// ---------- Intervention overall metrics ----------
 const rawInterv = readCsv<Record<string, string>>(
   "interventions/intervention_overall_metrics.csv",
 );
@@ -79,7 +68,6 @@ export const interventionOverall: InterventionOverallRow[] = rawInterv.map(
   }),
 );
 
-// ---------- Intervention subgroup metrics ----------
 const rawIntervSub = readCsv<Record<string, string>>(
   "interventions/intervention_metrics.csv",
 );

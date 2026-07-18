@@ -48,6 +48,7 @@ export function InterventionBars({ data }: { data: Row[] }) {
     title: string;
     description: string;
     key: keyof Row;
+    name: string;
     yMax: number;
     fmt: (v: number) => string;
   }[] = [
@@ -56,6 +57,7 @@ export function InterventionBars({ data }: { data: Row[] }) {
       description:
         "What happens to test accuracy when we modify the image at inference time?",
       key: "accuracy",
+      name: "Accuracy",
       yMax: 1,
       fmt: fmtPct,
     },
@@ -64,6 +66,7 @@ export function InterventionBars({ data }: { data: Row[] }) {
       description:
         "Fraction of samples where the predicted class changes after the intervention.",
       key: "prediction_flip_rate",
+      name: "Flip rate",
       yMax: 0.5,
       fmt: fmtPct1,
     },
@@ -72,6 +75,7 @@ export function InterventionBars({ data }: { data: Row[] }) {
       description:
         "How much of the Grad-CAM heat sits outside the center foreground box?",
       key: "avg_background_ratio",
+      name: "Background saliency",
       yMax: 1,
       fmt: fmtPct1,
     },
@@ -112,18 +116,20 @@ export function InterventionBars({ data }: { data: Row[] }) {
                   domain={[0, c.yMax]}
                 />
                 <Tooltip
+                  cursor={{ fill: "#ffffff10" }}
                   contentStyle={{
                     backgroundColor: "#0f172a",
                     border: "1px solid #1e293b",
                     borderRadius: 8,
-                    color: "#f1f5f9",
                   }}
+                  labelStyle={{ color: "#cbd5e1" }}
+                  itemStyle={{ color: "#f1f5f9" }}
                   formatter={(v: number) => c.fmt(v)}
                 />
                 <Legend
                   wrapperStyle={{ display: "none" }}
                 />
-                <Bar dataKey={c.key} radius={[6, 6, 0, 0]}>
+                <Bar dataKey={c.key} name={c.name} radius={[6, 6, 0, 0]}>
                   {labelled.map((d, i) => (
                     <Cell key={i} fill={COLORS[d.condition] ?? "#6366f1"} />
                   ))}

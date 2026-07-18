@@ -11,12 +11,12 @@ export function Footer() {
             Saliency-based Analysis of Shortcut Learning in CNNs
           </span>
         </div>
-        <div className="flex items-center gap-4">
-          <Link href="/code-walkthrough" className="hover:text-ink-100">
-            Code walkthrough
+        <div className="flex items-center gap-5">
+          <Link href="/method" className="hover:text-ink-100">
+            Method
           </Link>
-          <Link href="/references" className="hover:text-ink-100">
-            References
+          <Link href="/results" className="hover:text-ink-100">
+            Results
           </Link>
           <Link href="/report" className="hover:text-ink-100">
             Report (PDF)

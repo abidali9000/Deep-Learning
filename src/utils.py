@@ -43,15 +43,14 @@ def ensure_dirs(base_output_dir: str = "outputs") -> None:
 
 
 def get_group_id(label: int, place: int) -> int:
-    # label: 0 landbird, 1 waterbird; place: 0 land, 1 water
     if label == 1 and place == 1:
-        return 0  # waterbird-water
+        return 0
     if label == 1 and place == 0:
-        return 1  # waterbird-land
+        return 1
     if label == 0 and place == 0:
-        return 2  # landbird-land
+        return 2
     if label == 0 and place == 1:
-        return 3  # landbird-water
+        return 3
     raise ValueError(f"Unknown group for label={label}, place={place}")
 
 
@@ -67,7 +66,6 @@ def load_checkpoint(path: str, model: torch.nn.Module, device: torch.device) -> 
 
 
 def denormalize_tensor(img_tensor: torch.Tensor) -> np.ndarray:
-    """Return HWC float RGB image in [0, 1] from normalized CHW tensor."""
     mean = torch.tensor([0.485, 0.456, 0.406], device=img_tensor.device).view(3, 1, 1)
     std = torch.tensor([0.229, 0.224, 0.225], device=img_tensor.device).view(3, 1, 1)
     x = img_tensor * std + mean

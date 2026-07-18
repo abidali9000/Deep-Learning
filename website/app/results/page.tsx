@@ -1,112 +1,125 @@
-import Link from "next/link";
 import { SectionHeader } from "@/components/SectionHeader";
 import { MetricCard } from "@/components/MetricCard";
 import { SubgroupTable } from "@/components/SubgroupTable";
 import { ConfusionMatrix } from "@/components/ConfusionMatrix";
-import { TrainingChart } from "@/components/TrainingChart";
-import { InterventionBars } from "@/components/InterventionBars";
 import { SaliencyBars } from "@/components/SaliencyBars";
+import { GradCamGallery } from "@/components/GradCamGallery";
+import { InterventionBars } from "@/components/InterventionBars";
 import { InterventionTable } from "@/components/InterventionTable";
-import { GitHubLink } from "@/components/GitHubLink";
+import { ComparisonGallery } from "@/components/ComparisonGallery";
 import {
   gradCamGroupSummary,
   interventionOverall,
   interventionSubgroup,
   pct,
   testMetrics,
-  trainHistory,
 } from "@/lib/results";
 
 export default function ResultsPage() {
-  const fg = interventionOverall.find((r) => r.condition === "foreground_mask");
-  const bg = interventionOverall.find((r) => r.condition === "background_mask");
+  const fgMask = interventionOverall.find(
+    (r) => r.condition === "foreground_mask",
+  );
+  const bgMask = interventionOverall.find(
+    (r) => r.condition === "background_mask",
+  );
+
   return (
     <article className="section prose-academic">
       <SectionHeader
-        eyebrow="08 · Results dashboard"
-        title="All numbers in one place"
-        lead="The full project results assembled into one scrollable view, suitable for live presentation."
+        eyebrow="Results"
+        title="Evaluation, saliency, and intervention experiments"
+        lead="The headline accuracy looks strong, but subgroup metrics, Grad-CAM, and inference-time interventions all point to the same conclusion: the model leans on the background."
         sourceFiles={[
-          { path: "outputs/PROJECT_RESULTS_SUMMARY.md", label: "PROJECT_RESULTS_SUMMARY.md" },
+          { path: "src/evaluate.py" },
+          { path: "src/gradcam_analysis.py" },
+          { path: "src/interventions.py" },
         ]}
       />
 
-      <h2 className="h2 mb-3">Headline metrics</h2>
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <MetricCard
-          label="Overall test acc"
-          value={pct(testMetrics.overall_accuracy)}
-          tone="good"
-        />
-        <MetricCard
-          label="Worst-group acc"
-          value={pct(testMetrics.worst_group_accuracy)}
-          tone="bad"
-          hint="waterbird-land"
-        />
-        <MetricCard
-          label="Foreground-mask acc"
-          value={fg ? pct(fg.accuracy) : "—"}
-          tone="warn"
-          hint={fg ? `${pct(fg.prediction_flip_rate)} flips` : ""}
-        />
-        <MetricCard
-          label="Background-mask acc"
-          value={bg ? pct(bg.accuracy) : "—"}
-          tone="good"
-          hint="bg removal helps"
-        />
-      </div>
-
-      <h2 className="h2 mt-10 mb-3">Subgroup metrics</h2>
-      <div className="card">
-        <SubgroupTable />
-      </div>
-
-      <h2 className="h2 mt-10 mb-3">Confusion matrix</h2>
-      <ConfusionMatrix />
-
-      <h2 className="h2 mt-10 mb-3">Training dynamics</h2>
-      <TrainingChart data={trainHistory} />
-
-      <h2 className="h2 mt-10 mb-3">Grad-CAM saliency</h2>
-      <SaliencyBars data={gradCamGroupSummary} />
-
-      <h2 className="h2 mt-10 mb-3">Interventions</h2>
-      <InterventionBars data={interventionOverall} />
-
-      <h2 className="h2 mt-10 mb-3">Intervention × subgroup table</h2>
-      <InterventionTable rows={interventionSubgroup} />
-
-      <div className="mt-10 card">
-        <h3 className="h3 mb-2">Source files</h3>
-        <div className="flex flex-wrap gap-2">
-          <GitHubLink path="outputs/metrics/test_metrics.json" />
-          <GitHubLink path="outputs/metrics/test_predictions.csv" />
-          <GitHubLink path="outputs/metrics/train_history.csv" />
-          <GitHubLink path="outputs/gradcam/gradcam_results.csv" />
-          <GitHubLink path="outputs/gradcam/gradcam_group_summary.csv" />
-          <GitHubLink path="outputs/interventions/intervention_metrics.csv" />
-          <GitHubLink path="outputs/interventions/intervention_overall_metrics.csv" />
-          <GitHubLink path="outputs/interventions/intervention_predictions.csv" />
-          <GitHubLink path="outputs/PROJECT_RESULTS_SUMMARY.md" />
+      <section className="mb-12">
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <MetricCard
+            label="Overall accuracy"
+            value={pct(testMetrics.overall_accuracy, 1)}
+            tone="good"
+          />
+          <MetricCard
+            label="Worst-group accuracy"
+            value={pct(testMetrics.worst_group_accuracy, 1)}
+            tone="bad"
+            hint="Waterbird on land"
+          />
+          <MetricCard
+            label="Foreground mask"
+            value={fgMask ? pct(fgMask.accuracy, 1) : "—"}
+            tone="bad"
+            hint={fgMask ? `${pct(fgMask.prediction_flip_rate, 1)} of predictions flip` : ""}
+          />
+          <MetricCard
+            label="Background mask"
+            value={bgMask ? pct(bgMask.accuracy, 1) : "—"}
+            tone="good"
+            hint="Higher than the original"
+          />
         </div>
-      </div>
+      </section>
 
-      <Nav />
+      <section className="mb-12">
+        <h2 className="h2 mb-4">Subgroup accuracy</h2>
+        <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
+          <div className="card overflow-x-auto">
+            <SubgroupTable />
+          </div>
+          <ConfusionMatrix />
+        </div>
+      </section>
+
+      <section className="mb-12">
+        <h2 className="h2 mb-2">Grad-CAM saliency</h2>
+        <p className="text-ink-400 mb-4 max-w-3xl">
+          For every subgroup, a large share of the model&apos;s attention falls
+          on the background. The conflict groups are where that reliance turns
+          into misclassifications.
+        </p>
+        <div className="mb-6">
+          <SaliencyBars data={gradCamGroupSummary} />
+        </div>
+        <GradCamGallery />
+      </section>
+
+      <section className="mb-12">
+        <h2 className="h2 mb-2">Intervention experiments</h2>
+        <p className="text-ink-400 mb-4 max-w-3xl">
+          Editing the image at inference time isolates the background&apos;s
+          causal role. Masking the foreground collapses accuracy and flips many
+          predictions; changing only the background leaves accuracy intact or
+          even improves it.
+        </p>
+        <div className="mb-6">
+          <InterventionBars data={interventionOverall} />
+        </div>
+        <div className="card overflow-x-auto mb-6">
+          <InterventionTable rows={interventionSubgroup} />
+        </div>
+        <ComparisonGallery />
+      </section>
+
+      <section>
+        <h2 className="h2 mb-3">Conclusion</h2>
+        <div className="card max-w-3xl">
+          <p className="text-ink-300">
+            The {pct(testMetrics.overall_accuracy - testMetrics.worst_group_accuracy, 1)}{" "}
+            gap between overall and worst-group accuracy, the high background
+            saliency in every subgroup, and the intervention results together
+            show that the CNN has partially learned the shortcut{" "}
+            <em>background → bird type</em>. It still uses the bird, but it
+            relies on the background enough to hurt minority-subgroup
+            generalisation. The main limitations are that the foreground proxy
+            is a fixed centre crop rather than a true segmentation mask, and
+            that results come from a single ResNet18 run.
+          </p>
+        </div>
+      </section>
     </article>
-  );
-}
-
-function Nav() {
-  return (
-    <div className="mt-10 flex justify-between text-sm">
-      <Link href="/interventions" className="text-ink-400 hover:text-ink-100">
-        ← Interventions
-      </Link>
-      <Link href="/conclusion" className="text-accent hover:underline">
-        Next: Conclusion →
-      </Link>
-    </div>
   );
 }

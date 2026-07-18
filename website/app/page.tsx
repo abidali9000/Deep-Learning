@@ -47,6 +47,13 @@ export default function HomePage() {
               >
                 See the results
               </Link>
+              <a
+                href="/Shortcut-Learning-Report.pdf"
+                download="Anwar-Ali-Shortcut-Learning-Report.pdf"
+                className="rounded-md border border-accent px-5 py-2.5 font-medium text-accent hover:bg-accent/10"
+              >
+                Download report (PDF)
+              </a>
             </div>
           </div>
 
